@@ -84,6 +84,7 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
         ],
+
         'mongodb' => array(
             'driver'   => 'mongodb',
             'host'     => env('DB_HOST', 'localhost'),

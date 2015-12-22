@@ -17,8 +17,8 @@ class HomeController extends Controller
     public function testmongo(){
         $client = DB::getMongoClient();
         $db = DB::getMongoDB();
+        // $tweet = Tweet::all();
         dd($client);
-        $tweet = Tweet::all();
         return view('testmongo')->with('tweet',$tweet);
     }
     /**

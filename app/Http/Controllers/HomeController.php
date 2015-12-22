@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\tweet;
+use Jenssegers\Mongodb\Connection;
 use env;
 
 use Illuminate\Support\Facades\DB;
@@ -14,12 +15,14 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
 
-    public function testmongo(){
-        $client = DB::getMongoClient();
-        $db = DB::getMongoDB();
-        // $tweet = Tweet::all();
-        dd($client);
-        return view('testmongo')->with('tweet',$tweet);
+    public function testmongo(){ 
+        $tweet = new Tweet;
+        $tweet->save();
+        $tweets = Tweet::all();
+        dd($tweets);
+
+
+        return view('welcome');
     }
     /**
      * Display a listing of the resource.

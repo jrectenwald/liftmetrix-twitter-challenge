@@ -16,6 +16,11 @@ class User extends Eloquent {
     {
         return $this->embedsMany('Tweet');
     }
+
+    public function tweets_with_link()
+    {
+        return $this->embedsMany('Tweet');
+    }
 }
 
 

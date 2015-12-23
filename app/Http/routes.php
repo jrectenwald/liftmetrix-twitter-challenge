@@ -13,7 +13,7 @@
 
 Route::get('/','HomeController@index');
 
-Route::get('/users','UsersController@index');
+Route::get('/users','UsersController@store');
 Route::post('/users','UsersController@store');
 
 Route::get('/tweets','TweetsController@index');

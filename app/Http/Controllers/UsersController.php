@@ -33,10 +33,23 @@ class UsersController extends Controller
     {
         $name = $request['name'];
         $timeline = $this->gather_timeline($name);
-        $user = User::create(array('tweet' => $timeline[0]));
-        $user->create_tweets($timeline);
-
-        return view('users.show', array('user' => $user, 'tweets' => $user->tweets()));
+        
+        if(count($timeline) > 0) 
+        {
+            $user = User::create(array('tweet' => $timeline[0]));
+            $user->create_tweets($timeline);
+            return response()->json([
+                'User' => $user->name, 
+                'Number of tweets' => $user->number_of_tweets(),
+                'Number of tweets with link' => $user->number_of_tweets_with_link(),
+                'Number of retweets' => $user->number_of_retweets(),
+                'Average tweet length' => $user->average_tweet_length()
+            ]);
+        }
+        else
+        {
+            return response()->json("Unable to find user");
+        }
 
     }
 

@@ -17,11 +17,6 @@ class User extends Eloquent {
         return $this->embedsMany('Tweet');
     }
 
-    public function tweets_with_link()
-    {
-        return $this->embedsMany('Tweet');
-    }
-
     public function number_of_tweets()
     {
         return count($this['tweets']);
@@ -50,6 +45,25 @@ class User extends Eloquent {
         }
         return ($total_tweet_length / $number_of_tweets);
     }
+
+     public function create_tweets($aggregate_timeline)
+    {
+        for ($i = 0; $i < count($aggregate_timeline); $i++) {
+            $reg_exUrl = '#\bhttps?://[^\s()<>]#';
+            $text = $aggregate_timeline[$i]['text'];
+            preg_match_all($reg_exUrl, $text, $links);
+            $link_count = count($links[0]);
+
+            $user->tweets()->create(array(
+                'length' => strlen($aggregate_timeline[$i]['text']),
+                'retweet_count' => $aggregate_timeline[$i]['retweet_count'],
+                'favorite_count' => $aggregate_timeline[$i]['favorite_count'],
+                'link_count' => $link_count
+            ));
+        }
+    }
+
+
 }
 
 

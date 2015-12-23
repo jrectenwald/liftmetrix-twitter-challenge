@@ -45,21 +45,8 @@ class UsersController extends Controller
             'user_name' => $aggregate_timeline[0]['user']['screen_name']
         ));
 
+        $user->create_tweets($aggregate_timeline);
 
-
-        for ($i = 0; $i < count($aggregate_timeline); $i++) {
-            $reg_exUrl = '#\bhttps?://[^\s()<>]#';
-            $text = $aggregate_timeline[$i]['text'];
-            preg_match_all($reg_exUrl, $text, $links);
-            $link_count = count($links[0]);
-
-            $user->tweets()->create(array(
-                'length' => strlen($aggregate_timeline[$i]['text']),
-                'retweet_count' => $aggregate_timeline[$i]['retweet_count'],
-                'favorite_count' => $aggregate_timeline[$i]['favorite_count'],
-                'link_count' => $link_count
-            ));
-        }
         return view('users.show', array('user' => $user, 'tweets' => $user->tweets()));
 
     }

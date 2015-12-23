@@ -63,18 +63,13 @@ class UsersController extends Controller
             preg_match_all($reg_exUrl, $text, $links);
             $link_count = count($links[0]);
 
-            $tweet = Tweet::create(array(
+            $user->tweets()->create(array(
                 'length' => strlen($aggregate_timeline[$i]['text']),
                 'retweet_count' => $aggregate_timeline[$i]['retweet_count'],
                 'favorite_count' => $aggregate_timeline[$i]['favorite_count'],
                 'link_count' => $link_count
             ));
-            dd($tweet);
-            $user->tweets()->save($tweet);
         }
-
-
-        dd($user);
     }
 
     /**

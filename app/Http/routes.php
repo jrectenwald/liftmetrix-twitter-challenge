@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/','HomeController@testmongo');
+Route::get('/','HomeController@index');
 
 Route::get('/users','UsersController@index');
 Route::post('/users','UsersController@store');

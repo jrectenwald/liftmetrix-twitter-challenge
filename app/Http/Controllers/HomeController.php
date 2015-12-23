@@ -14,16 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-
-    public function testmongo(){ 
-        $tweet = new Tweet;
-        $tweet->save();
-        $tweets = Tweet::all();
-        dd($tweets);
-
-
-        return view('welcome');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +21,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //
+        return view('welcome');
     }
 
     /**

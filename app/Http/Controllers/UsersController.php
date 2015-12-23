@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Twitter;
+use Response;
 
 class UsersController extends Controller
 {
@@ -38,8 +40,8 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $name = $request['name'];
-        
-        return $name;
+        $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'count' => 20, 'format' => 'array']);
+        dd($timeline[0]);
     }
 
     /**

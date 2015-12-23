@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Tweet;
+use App\User;
 use Twitter;
 use Response;
 
@@ -44,12 +45,36 @@ class UsersController extends Controller
         $aggregate_timeline = [];
 
         for ($page_number = 1; $page_number <= 1; $page_number++) {
-            $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'page' => $page_number, 'count' => 200, 'format' => 'array', 'exclude_replies' => true]);
+            $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'page' => $page_number, 'count' => 200, 'format' => 'array', 'exclude_replies' => true, 'include_rts' => false]);
             $aggregate_timeline = array_merge($aggregate_timeline, $timeline);
 
         }
 
-        dd($aggregate_timeline[2]);
+        $user = User::create(array(
+            'name' => $aggregate_timeline[0]['user']['name'], 
+            'user_name' => $aggregate_timeline[0]['user']['screen_name']
+        ));
+
+
+
+        for ($i = 0; $i < count($aggregate_timeline); $i++) {
+            $reg_exUrl = '#\bhttps?://[^\s()<>]#';
+            $text = $aggregate_timeline[$i]['text'];
+            preg_match_all($reg_exUrl, $text, $links);
+            $link_count = count($links[0]);
+
+            $tweet = Tweet::create(array(
+                'length' => strlen($aggregate_timeline[$i]['text']),
+                'retweet_count' => $aggregate_timeline[$i]['retweet_count'],
+                'favorite_count' => $aggregate_timeline[$i]['favorite_count'],
+                'link_count' => $link_count
+            ));
+            dd($tweet);
+            $user->tweets()->save($tweet);
+        }
+
+
+        dd($user);
     }
 
     /**

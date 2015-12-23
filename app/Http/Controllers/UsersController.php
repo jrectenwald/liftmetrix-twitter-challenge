@@ -40,8 +40,17 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $name = $request['name'];
-        $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'count' => 20, 'format' => 'array']);
-        dd($timeline[0]);
+        $aggregate_timeline = [];
+
+        for ($page_number = 1; $page_number <= 16; $page_number++) {
+            $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'page' => $page_number, 'count' => 200, 'format' => 'array']);
+            $aggregate_timeline = array_merge($aggregate_timeline, $timeline);
+
+        }
+
+        $number_of_tweets = count($aggregate_timeline);
+
+        dd($number_of_tweets);
     }
 
     /**

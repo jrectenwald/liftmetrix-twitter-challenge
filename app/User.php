@@ -11,6 +11,12 @@ class User extends Eloquent {
     protected $collection = 'users';
 
     protected $fillable = ['name', 'handle'];
+
+    function __construct($tweet) {
+        $tweet = reset($tweet);
+        $this->name  = $tweet['user']['name'];
+        $this->handle = $tweet['user']['screen_name'];
+    }
     
     public function tweets()
     {
@@ -31,7 +37,7 @@ class User extends Eloquent {
     {
         $total_retweet_count = 0;
         for ($index = 0; $index < $this->number_of_tweets(); $index++) {
-            $total_retweet_count += $this->tweets[0]['favorite_count'];
+            $total_retweet_count += $this->tweets[$index]['favorite_count'];
         }
         return $total_retweet_count;
     }
@@ -46,18 +52,18 @@ class User extends Eloquent {
         return ($total_tweet_length / $number_of_tweets);
     }
 
-     public function create_tweets($aggregate_timeline)
+     public function create_tweets($timeline)
     {
-        for ($i = 0; $i < count($aggregate_timeline); $i++) {
+        for ($i = 0; $i < count($timeline); $i++) {
             $reg_exUrl = '#\bhttps?://[^\s()<>]#';
-            $text = $aggregate_timeline[$i]['text'];
+            $text = $timeline[$i]['text'];
             preg_match_all($reg_exUrl, $text, $links);
             $link_count = count($links[0]);
 
-            $user->tweets()->create(array(
-                'length' => strlen($aggregate_timeline[$i]['text']),
-                'retweet_count' => $aggregate_timeline[$i]['retweet_count'],
-                'favorite_count' => $aggregate_timeline[$i]['favorite_count'],
+            $this->tweets()->create(array(
+                'length' => strlen($timeline[$i]['text']),
+                'retweet_count' => $timeline[$i]['retweet_count'],
+                'favorite_count' => $timeline[$i]['favorite_count'],
                 'link_count' => $link_count
             ));
         }

@@ -12,3 +12,9 @@
 */
 
 Route::get('/','HomeController@testmongo');
+
+Route::get('/users','UsersController@index');
+Route::post('/users','UsersController@store');
+
+Route::get('/tweets','TweetsController@index');
+

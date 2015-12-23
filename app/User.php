@@ -40,6 +40,16 @@ class User extends Eloquent {
         }
         return $total_retweet_count;
     }
+
+    public function average_tweet_length()
+    {
+        $number_of_tweets = $this->number_of_tweets();
+        $total_tweet_length = 0;
+        for ($index = 0; $index < $this->number_of_tweets(); $index++) {
+            $total_tweet_length += $this->tweets[0]['length'];
+        }
+        return ($total_tweet_length / $number_of_tweets);
+    }
 }
 
 

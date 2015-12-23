@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Tweet;
 use Twitter;
 use Response;
 
@@ -42,15 +43,13 @@ class UsersController extends Controller
         $name = $request['name'];
         $aggregate_timeline = [];
 
-        for ($page_number = 1; $page_number <= 16; $page_number++) {
-            $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'page' => $page_number, 'count' => 200, 'format' => 'array']);
+        for ($page_number = 1; $page_number <= 1; $page_number++) {
+            $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'page' => $page_number, 'count' => 200, 'format' => 'array', 'exclude_replies' => true]);
             $aggregate_timeline = array_merge($aggregate_timeline, $timeline);
 
         }
 
-        $number_of_tweets = count($aggregate_timeline);
-
-        dd($number_of_tweets);
+        dd($aggregate_timeline[2]);
     }
 
     /**

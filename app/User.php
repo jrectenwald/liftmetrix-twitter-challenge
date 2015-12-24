@@ -59,13 +59,14 @@ class User extends Eloquent {
             $text = $timeline[$i]['text'];
             preg_match_all($reg_exUrl, $text, $links);
             $link_count = count($links[0]);
+            $date = new \DateTime($timeline[$i]['created_at']);
 
             $this->tweets()->create(array(
                 'length' => strlen($timeline[$i]['text']),
                 'retweet_count' => $timeline[$i]['retweet_count'],
                 'favorite_count' => $timeline[$i]['favorite_count'],
                 'link_count' => $link_count,
-                'datetime' => $timeline[$i]['created_at']
+                'datetime' => $date
             ));
         }
     }
@@ -76,7 +77,8 @@ class User extends Eloquent {
         $tweets = $this->tweets();
         for ($i = 0; $i < $this->number_of_tweets(); $i++) {
             $tweet_attributes = $this->tweets[$i]->attributes;
-            $time = $this->parse_time($tweet_attributes['datetime']);
+            $time = $tweet_attributes['datetime'];
+            dd($time);
             $tweet_value = $tweet_attributes['retweet_count'] + $tweet_attributes['favorite_count'];
 
             if(isset($tweets_time_frequency[$time]))
@@ -90,13 +92,6 @@ class User extends Eloquent {
         }
         $max = max($tweets_time_frequency);
         return array_search($max, $tweets_time_frequency);
-    }
-
-    public function parse_time($datetime)
-    {
-        $datetime_array = explode(' ', $datetime);
-        $time = $datetime_array[3];
-        return substr($time, 0, 4) . "0";
     }
 }
 

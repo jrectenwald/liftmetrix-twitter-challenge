@@ -31,6 +31,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+
         $name = $request['name'];
         $timeline = $this->gather_timeline($name);
         
@@ -43,7 +44,8 @@ class UsersController extends Controller
                 'Number of tweets' => $user->number_of_tweets(),
                 'Number of tweets with link' => $user->number_of_tweets_with_link(),
                 'Number of retweets' => $user->number_of_retweets(),
-                'Average tweet length' => $user->average_tweet_length()
+                'Average tweet length' => $user->average_tweet_length(),
+                'Optimal tweet time' => $user->optimal_tweet_time()
             ]);
         }
         else

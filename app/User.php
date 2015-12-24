@@ -36,8 +36,8 @@ class User extends Eloquent {
     public function number_of_retweets()
     {
         $total_retweet_count = 0;
-        for ($index = 0; $index < $this->number_of_tweets(); $index++) {
-            $total_retweet_count += $this->tweets[$index]['favorite_count'];
+        for ($i = 0; $i < $this->number_of_tweets(); $i++) {
+            $total_retweet_count += $this->tweets[$i]['favorite_count'];
         }
         return $total_retweet_count;
     }
@@ -46,10 +46,10 @@ class User extends Eloquent {
     {
         $number_of_tweets = $this->number_of_tweets();
         $total_tweet_length = 0;
-        for ($index = 0; $index < $this->number_of_tweets(); $index++) {
-            $total_tweet_length += $this->tweets[0]['length'];
+        for ($i = 0; $i < $this->number_of_tweets(); $i++) {
+            $total_tweet_length += $this->tweets[$i]['length'];
         }
-        return ($total_tweet_length / $number_of_tweets);
+        return (floor($total_tweet_length / $number_of_tweets));
     }
 
      public function create_tweets($timeline)
@@ -64,12 +64,40 @@ class User extends Eloquent {
                 'length' => strlen($timeline[$i]['text']),
                 'retweet_count' => $timeline[$i]['retweet_count'],
                 'favorite_count' => $timeline[$i]['favorite_count'],
-                'link_count' => $link_count
+                'link_count' => $link_count,
+                'datetime' => $timeline[$i]['created_at']
             ));
         }
     }
 
+    public function optimal_tweet_time()
+    {
+        $tweets_time_frequency = [];
+        $tweets = $this->tweets();
+        for ($i = 0; $i < $this->number_of_tweets(); $i++) {
+            $tweet_attributes = $this->tweets[$i]->attributes;
+            $time = $this->parse_time($tweet_attributes['datetime']);
+            $tweet_value = $tweet_attributes['retweet_count'] + $tweet_attributes['favorite_count'];
 
+            if(isset($tweets_time_frequency[$time]))
+            {
+                $tweets_time_frequency[$time] += $tweet_value;
+            }
+            else
+            {
+                $tweets_time_frequency[$time] = $tweet_value;
+            }
+        }
+        $max = max($tweets_time_frequency);
+        return array_search($max, $tweets_time_frequency);
+    }
+
+    public function parse_time($datetime)
+    {
+        $datetime_array = explode(' ', $datetime);
+        $time = $datetime_array[3];
+        return substr($time, 0, 4) . "0";
+    }
 }
 
 

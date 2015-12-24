@@ -9,6 +9,6 @@ class Tweet extends Eloquent {
 
     protected $collection = 'tweets';
 
-    protected $fillable = array('length', 'retweet_count', 'favorite_count', 'link_count');
+    protected $fillable = array('length', 'retweet_count', 'favorite_count', 'link_count', 'datetime');
 
 }

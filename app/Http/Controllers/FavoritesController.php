@@ -60,7 +60,7 @@ class FavoritesController extends Controller
     private function gather_timeline($name)
     {
         $aggregate_timeline = [];
-        for ($page_number = 1; $page_number <= 1; $page_number++) {
+        for ($page_number = 1; $page_number <= 16; $page_number++) {
             $timeline = Twitter::getUserTimeline(['screen_name' => $name, 'page' => $page_number, 'count' => 200, 'format' => 'array', 'exclude_replies' => true]);
             $aggregate_timeline = array_merge($aggregate_timeline, $timeline);
 

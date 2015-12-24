@@ -16,5 +16,8 @@ Route::get('/','HomeController@index');
 Route::get('/users','UsersController@store');
 Route::post('/users','UsersController@store');
 
-Route::get('/retweets','TweetsController@retweets');
+Route::get('/retweets','TweetsController@index');
+
+Route::get('/favorites','FavoritesController@index');
+
 

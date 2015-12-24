@@ -78,7 +78,7 @@ class User extends Eloquent {
         for ($i = 0; $i < $this->number_of_tweets(); $i++) {
             $tweet_attributes = $this->tweets[$i]->attributes;
             $time = $tweet_attributes['datetime'];
-            dd($time);
+            $time = substr(explode(' ', $time->date)[1], 0, 4) . "0";
             $tweet_value = $tweet_attributes['retweet_count'] + $tweet_attributes['favorite_count'];
 
             if(isset($tweets_time_frequency[$time]))

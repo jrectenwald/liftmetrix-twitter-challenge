@@ -16,8 +16,8 @@ class TweetsController extends Controller
     
     public function retweets(Request $request)
     {
-        $startdate = $request['startdate'];
-        $enddate = $request['enddate'];
+        $startdate = new \DateTime($request['startdate']);
+        $enddate = new \DateTime($request['enddate']);
         $name = $request['name'];
         $timeline = $this->gather_timeline($name);
 
@@ -26,18 +26,17 @@ class TweetsController extends Controller
         {
             $retweets_over_time = [];
             $user = User::create(array('tweet' => $timeline[0]));
-            $user->create_tweets($timeline);
 
             for ($i = 0; $i < count($timeline); $i++)
             {
                 $tweet = $timeline[$i];
-                $date_array = explode(' ', $tweet['created_at']);
-                $date = $date_array[1] . ' ' . $date_array[2] . ', ' . $date_array[5];
-                if(isset($retweets_over_time[$date]))
+                $created_at = new \DateTime($tweet['created_at']);
+                $date = $created_at->format('m-d-Y');
+                if(isset($retweets_over_time[$date]) && $created_at > $startdate && $created_at < $enddate)
                 {
                     $retweets_over_time[$date] += $tweet['retweet_count'];
                 }
-                else
+                elseif($created_at > $startdate && $created_at < $enddate)
                 {
                     $retweets_over_time[$date] = $tweet['retweet_count'];
                 }
